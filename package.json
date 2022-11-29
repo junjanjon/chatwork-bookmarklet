@@ -1,0 +1,17 @@
+{
+  "name": "chatwork-bookmarklet",
+  "scripts": {
+    "lint": "eslint bookmarklets_src/**.js",
+    "fixlint": "eslint bookmarklets_src/**.js --fix",
+    "minify": "find bookmarklets_src -name '*.js' | xargs -I{} uglifyjs {} -c -o {}.min",
+    "to_bookmarklet": "find bookmarklets_src -name '*.min' | xargs -I{} sed -i'.tmp' -e 's/^/javascript:(function(){/' -e's/$/})();/' {}",
+    "build": "npm run minify && npm run to_bookmarklet",
+    "postbuild": "rm -rf bookmarklets && mkdir -p bookmarklets && find bookmarklets_src -name '*.min' | awk '{ gsub(\".min\", \"\", $1); gsub(/.+\\//, \"\", $1); print $1 }'| xargs -I{} cp bookmarklets_src/{}.min bookmarklets/{}"
+  },
+  "devDependencies": {
+    "eslint": "^8.28.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "uglify-es": "^3.1.1"
+  }
+}
