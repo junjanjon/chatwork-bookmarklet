@@ -1,7 +1,4 @@
 function readRoom(roomId) {
-  if (roomId === null) {
-    return;
-  }
   const url = ['https://kcw.kddi.ne.jp/gateway.php',
     '?cmd=read',
     '&_v=', CLIENT_VER,
@@ -15,4 +12,8 @@ function readRoom(roomId) {
 }
 
 const liCollection = document.getElementById('RoomList').getElementsByTagName('li');
-Array.prototype.forEach.call(liCollection, (li) => { readRoom(li.getAttribute('data-rid')); });
+Array.prototype.forEach.call(liCollection, (li) => {
+  if (!li.classList.contains('_unreadBadge')) {
+    readRoom(li.getAttribute('data-rid'));
+  }
+});
